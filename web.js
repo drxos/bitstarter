@@ -1,12 +1,17 @@
-var express = require('express');
+var http = require('http');
+var fs = require('fs');
 
-var app = express.createServer(express.logger());
-
-app.get('/', function(request, response) {
-  response.send('Hello World 2!');
+var server = http.createServer(function(req, res){
+	fs.readFile('index.html', 'utf8', function(err, data){
+		res.writeHead(200, {'Content-Type': 'text/html'});
+			if (err)
+			res.write('Could not find or open file for reading\n');
+			else
+			// if no error, write JS file to client
+			res.write(data);
+			res.end();
+	});
+	
 });
-
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log("Listening on " + port);
-});
+server.listen(5000);
+console.log("Running Node Server on 5000 port ...");
